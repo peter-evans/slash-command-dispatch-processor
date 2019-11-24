@@ -22,6 +22,7 @@ jobs:
         uses: ./.github/create-or-update-comment
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: hooray
       - name: Create comment
@@ -29,6 +30,7 @@ jobs:
         uses: ./.github/create-or-update-comment
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
           issue-number: ${{ github.event.client_payload.github.payload.issue.number }}
           body: |
             Hello @${{ github.event.client_payload.github.actor }}!
