@@ -6,6 +6,7 @@ jobs:
   helloWorld:
     runs-on: ubuntu-latest
     steps:
+      # Checkout the pull request branch
       - uses: actions/checkout@v1
         with:
           repository: ${{ github.event.client_payload.pull_request.head.repo.full_name }}
@@ -34,6 +35,18 @@ jobs:
       #     issue-number: ${{ github.event.client_payload.github.payload.issue.number }}
       #     body: |
       #       Hello @${{ github.event.client_payload.github.actor }}!
+
+      - name: Append to hello-world.txt
+        run: echo "Hello @${{ github.event.client_payload.github.actor }}!" >> hello-world.txt
+
+      - name: Commit to the PR branch
+        run: |
+          git config --global user.name 'actions-bot'
+          git config --global user.email '58130806+actions-bot@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${{ secrets.ACTIONS_BOT_TOKEN }}@github.com/${{ github.event.client_payload.pull_request.head.repo.full_name }}
+          git add -A
+          git commit -m "Add hello response"
+          git push
 
       - name: Add reaction
         #uses: peter-evans/create-or-update-comment@v1
