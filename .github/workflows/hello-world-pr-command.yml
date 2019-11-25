@@ -26,19 +26,11 @@ jobs:
           PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload) }}
         run: echo "$PAYLOAD_CONTEXT"
 
-      # - name: Create comment
-      #   #uses: peter-evans/create-or-update-comment@v1
-      #   uses: ./.github/create-or-update-comment
-      #   with:
-      #     token: ${{ secrets.ACTIONS_BOT_TOKEN }}
-      #     repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
-      #     issue-number: ${{ github.event.client_payload.github.payload.issue.number }}
-      #     body: |
-      #       Hello @${{ github.event.client_payload.github.actor }}!
-
+      # Append a response to the user that issued the command
       - name: Append to hello-world.txt
         run: echo "Hello @${{ github.event.client_payload.github.actor }}!" >> hello-world.txt
 
+      # Commit the change to the PR branch
       - name: Commit to the PR branch
         run: |
           git config --global user.name 'actions-bot'
