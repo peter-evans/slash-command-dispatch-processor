@@ -1,7 +1,7 @@
 name: Hello World Command
 on:
   repository_dispatch:
-    types: [hello-world-remote-command]
+    types: [hello-world-command]
 jobs:
   helloWorld:
     runs-on: ubuntu-latest
@@ -16,6 +16,12 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+
+      # For debugging purposes. Remove this in production.
+      - name: Dump the client payload context
+        env:
+          PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload) }}
+        run: echo "$PAYLOAD_CONTEXT"
 
       - name: Add reaction
         #uses: peter-evans/create-or-update-comment@v1
