@@ -7,11 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-        # with:
-        #   repository: ${{ github.event.client_payload.repository }}
-        #   ref: ${{ github.event.client_payload.head_ref }}
-        #   path: ${{ github.event.repository.name }}
-        #   token: ${{ secrets.REPO_ACCESS_TOKEN }}
+        with:
+          repository: ${{ github.event.client_payload.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.client_payload.pull_request.head.ref }}
+          path: ${{ github.event.repository.name }}
+          token: ${{ secrets.ACTIONS_BOT_TOKEN }}
 
       # For debugging purposes. Remove this in production.
       - name: Dump GitHub context
