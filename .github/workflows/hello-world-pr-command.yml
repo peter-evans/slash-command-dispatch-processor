@@ -1,13 +1,17 @@
-name: Hello World Command
+name: Hello World Pull Request Command
 on:
   repository_dispatch:
-    types: [hello-world-command]
+    types: [hello-world-pr-command]
 jobs:
   helloWorld:
     runs-on: ubuntu-latest
     steps:
-      # Checkout is necessary here due to referencing a local action.
       - uses: actions/checkout@v1
+        # with:
+        #   repository: ${{ github.event.client_payload.repository }}
+        #   ref: ${{ github.event.client_payload.head_ref }}
+        #   path: ${{ github.event.repository.name }}
+        #   token: ${{ secrets.REPO_ACCESS_TOKEN }}
 
       # For debugging purposes. Remove this in production.
       - name: Dump GitHub context
@@ -21,6 +25,16 @@ jobs:
           PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload) }}
         run: echo "$PAYLOAD_CONTEXT"
 
+      # - name: Create comment
+      #   #uses: peter-evans/create-or-update-comment@v1
+      #   uses: ./.github/create-or-update-comment
+      #   with:
+      #     token: ${{ secrets.ACTIONS_BOT_TOKEN }}
+      #     repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
+      #     issue-number: ${{ github.event.client_payload.github.payload.issue.number }}
+      #     body: |
+      #       Hello @${{ github.event.client_payload.github.actor }}!
+
       - name: Add reaction
         #uses: peter-evans/create-or-update-comment@v1
         uses: ./.github/create-or-update-comment
@@ -29,12 +43,3 @@ jobs:
           repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: hooray
-      - name: Create comment
-        #uses: peter-evans/create-or-update-comment@v1
-        uses: ./.github/create-or-update-comment
-        with:
-          token: ${{ secrets.ACTIONS_BOT_TOKEN }}
-          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
-          issue-number: ${{ github.event.client_payload.github.payload.issue.number }}
-          body: |
-            Hello @${{ github.event.client_payload.github.actor }}!
