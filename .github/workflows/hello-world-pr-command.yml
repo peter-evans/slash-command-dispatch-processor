@@ -14,18 +14,6 @@ jobs:
           path: ${{ github.event.repository.name }}
           token: ${{ secrets.ACTIONS_BOT_TOKEN }}
 
-      # For debugging purposes. Remove this in production.
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
-      # For debugging purposes. Remove this in production.
-      - name: Dump the client payload context
-        env:
-          PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload) }}
-        run: echo "$PAYLOAD_CONTEXT"
-
       # Append a response to the user that issued the command
       - name: Append to hello-world.txt
         run: echo "Hello @${{ github.event.client_payload.github.actor }}!" >> hello-world.txt
@@ -41,8 +29,7 @@ jobs:
           git push
 
       - name: Add reaction
-        #uses: peter-evans/create-or-update-comment@v1
-        uses: ./.github/create-or-update-comment
+        uses: peter-evans/create-or-update-comment@v1
         with:
           token: ${{ secrets.ACTIONS_BOT_TOKEN }}
           repository: ${{ github.event.client_payload.github.payload.repository.full_name }}

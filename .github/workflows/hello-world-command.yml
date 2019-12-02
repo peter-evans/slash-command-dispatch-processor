@@ -6,32 +6,16 @@ jobs:
   helloWorld:
     runs-on: ubuntu-latest
     steps:
-      # Checkout is necessary here due to referencing a local action.
-      - uses: actions/checkout@v1
-
-      # For debugging purposes. Remove this in production.
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
-      # For debugging purposes. Remove this in production.
-      - name: Dump the client payload context
-        env:
-          PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload) }}
-        run: echo "$PAYLOAD_CONTEXT"
-
       - name: Add reaction
-        #uses: peter-evans/create-or-update-comment@v1
-        uses: ./.github/create-or-update-comment
+        uses: peter-evans/create-or-update-comment@v1
         with:
           token: ${{ secrets.ACTIONS_BOT_TOKEN }}
           repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: hooray
+
       - name: Create comment
-        #uses: peter-evans/create-or-update-comment@v1
-        uses: ./.github/create-or-update-comment
+        uses: peter-evans/create-or-update-comment@v1
         with:
           token: ${{ secrets.ACTIONS_BOT_TOKEN }}
           repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
