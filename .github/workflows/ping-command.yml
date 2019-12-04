@@ -1,4 +1,4 @@
-name: Ping Command
+name: ping-command
 on:
   repository_dispatch:
     types: [ping-command]

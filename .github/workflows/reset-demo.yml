@@ -1,9 +1,9 @@
-name: hello-world-pr-command
+name: reset-demo-command
 on:
   repository_dispatch:
-    types: [hello-world-pr-command]
+    types: [reset-demo-command]
 jobs:
-  helloWorld:
+  autopep8:
     runs-on: ubuntu-latest
     steps:
       # Checkout the pull request branch
@@ -14,18 +14,26 @@ jobs:
           path: ${{ github.event.repository.name }}
           token: ${{ secrets.ACTIONS_BOT_TOKEN }}
 
-      # Append a response to the user that issued the command
-      - name: Append to hello-world.txt
-        run: echo "Hello @${{ github.event.client_payload.github.actor }}!" >> hello-world.txt
+      # Determine if the current commit should be reverted
+      - name: Check commit
+        id: check
+        run: |
+          commit_msg=$(git log --oneline -1)
+          if [[ $commit_msg =~ "[autopep8-command]" ||
+                $commit_msg =~ "[black-command]" ]]
+          then
+            echo ::set-output name=revert::true
+          fi
 
-      # Commit the change to the PR branch
-      - name: Commit to the PR branch
+      # Revert the last commit to the PR branch
+      - name: Revert commit
+        if: steps.check.outputs.revert == 'true'
         run: |
           git config --global user.name 'actions-bot'
           git config --global user.email '58130806+actions-bot@users.noreply.github.com'
           git remote set-url origin https://x-access-token:${{ secrets.ACTIONS_BOT_TOKEN }}@github.com/${{ github.event.client_payload.pull_request.head.repo.full_name }}
-          git add -A
-          git commit -m "[hello-world-pr-command] Add hello response"
+          git revert --no-commit $(git rev-parse HEAD)
+          git commit -m "[reset-demo-command] revert last commit"
           git push
 
       - name: Add reaction

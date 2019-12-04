@@ -1,4 +1,4 @@
-name: autopep8 Command
+name: autopep8-command
 on:
   repository_dispatch:
     types: [autopep8-command]

@@ -1,4 +1,4 @@
-name: Hello World Command
+name: hello-world-command
 on:
   repository_dispatch:
     types: [hello-world-command]
