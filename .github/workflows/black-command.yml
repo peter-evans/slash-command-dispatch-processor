@@ -19,13 +19,14 @@ jobs:
       - name: Install black
         run: pip install black
 
-      # Execute black
+      # Execute black in check mode
       - name: Black
-        run: black --check .
+        id: black
+        run: echo ::set-output name=format::$(black --check --quiet . || echo "true")
 
-      # Commit the change to the PR branch
+      # Execute black and commit the change to the PR branch
       - name: Commit to the PR branch
-        if: failure()
+        if: steps.black.outputs.format == 'true'
         run: |
           black .
           git config --global user.name 'actions-bot'
