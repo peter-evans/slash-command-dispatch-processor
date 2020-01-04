@@ -13,8 +13,10 @@ jobs:
           repository: ${{ github.event.client_payload.pull_request.head.repo.full_name }}
           ref: ${{ github.event.client_payload.pull_request.head.ref }}
 
-      # Install black
+      # Setup Python environment
       - uses: actions/setup-python@v1
+
+      # Install black
       - name: Install black
         run: pip install black
 
