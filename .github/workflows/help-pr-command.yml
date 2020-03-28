@@ -1,0 +1,21 @@
+name: help-pr-command
+on:
+  repository_dispatch:
+    types: [help-pr-command]
+jobs:
+  help:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          token: ${{ secrets.ACTIONS_BOT_TOKEN }}
+          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
+          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
+          body: |
+            > Command | Description
+            > --- | ---
+            > /hello-world | Commit a greeting from the world to hello-world.txt
+            > /black | Format Python using [Black](https://github.com/psf/black)
+            > /reset-demo | Reset the code formatting demo
+          reaction-type: hooray
