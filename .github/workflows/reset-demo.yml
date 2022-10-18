@@ -22,7 +22,7 @@ jobs:
           if [[ $commit_msg =~ "[autopep8-command]" ||
                 $commit_msg =~ "[black-command]" ]]
           then
-            echo ::set-output name=revert::true
+            echo "revert=true" >> $GITHUB_OUTPUT
           fi
 
       # Revert the last commit to the PR branch
