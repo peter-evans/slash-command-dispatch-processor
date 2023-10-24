@@ -18,4 +18,4 @@ jobs:
             > /hello-world | Commit a greeting from the world to hello-world.txt
             > /black | Format Python using [Black](https://github.com/psf/black)
             > /reset-demo | Reset the code formatting demo
-          reaction-type: hooray
+          reactions: hooray

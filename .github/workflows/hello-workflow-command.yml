@@ -24,7 +24,7 @@ jobs:
           token: ${{ secrets.ACTIONS_BOT_TOKEN }}
           repository: ${{ github.event.inputs.repository }}
           comment-id: ${{ github.event.inputs.comment-id }}
-          reaction-type: hooray
+          reactions: hooray
 
       - name: Create URL to the run output
         id: vars
