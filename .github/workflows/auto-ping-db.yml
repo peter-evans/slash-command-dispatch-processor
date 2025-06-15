@@ -1,0 +1,12 @@
+name: auto-ping-db
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"  # every 5 minutes
+
+jobs:
+  pingMongo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping MongoDB API
+        run: curl -s https://farm-ease-seven.vercel.app/api/ping-db
